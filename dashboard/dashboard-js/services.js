@@ -1,12 +1,18 @@
+const formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 0
+})
+
 var renderData = function(data){
 	var amount_applied_id = $("#tot_amnt_applied");
-	amount_applied_id.html("<h1>$"+parseInt(data.total_amnt_applied)+"</h1>");
+	amount_applied_id.html("<h2>"+formatter.format(parseInt(data.total_amnt_applied))+"</h2>");
 
 	var amount_funded_id = $("#tot_amnt_funded");
-	amount_funded_id.html("<h1>$"+data.total_amnt_funded+"</h1>");
+	amount_funded_id.html("<h2>"+formatter.format(parseInt(data.total_amnt_funded))+"</h2>");
 
 	var amount_invested_id = $("#tot_amnt_invested");
-	amount_invested_id.html("<h1>$"+parseInt(data.total_amnt_inv)+"</h1>");
+	amount_invested_id.html("<h2>"+formatter.format(parseInt(data.total_amnt_inv))+"</h2>");
 };
 
 var plotLoanByCreditGrade = function(data,callback){
