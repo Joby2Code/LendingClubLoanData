@@ -1,0 +1,73 @@
+swagger: '2.0'
+info:
+  title: Lending Loan Data Analysis API
+  description: 'Report generation API service for Lending Loan Data.'
+  version: 1.0.0
+schemes:
+  - https
+basePath: /v1
+produces:
+  - application/json
+paths:
+  /generateReport:
+    get:
+      summary: The endpoint to generate loan report.
+      description: |
+        This api takes the year from the client and generates the summary for the user.
+      tags:
+        - LOAN
+      operationId: generateReport
+      produces:
+        - application/json
+      parameters:
+        - name: year
+          in: query
+          description: Year to generate reports
+          type: string
+          required: true
+      responses:
+        '200':
+          description: A Loan Summary Report
+          schema:
+            $ref: '#/definitions/LoanReport'
+        '403':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  LoanReport:
+    type: object
+    properties:
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/Report'
+  Report:
+    type: object
+    properties:
+      type:
+        type: string
+      unstructured:
+        $ref: '#/definitions/UnstructuredMessage'
+  UnstructuredMessage:
+    type: object
+    properties:
+      id:
+        type: string
+      text:
+        type: string
+      timestamp:
+        type: string
+        format: datetime
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string

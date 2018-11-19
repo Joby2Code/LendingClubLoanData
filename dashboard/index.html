@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Lending Loan Report Dashboard</title>
+    <!--
+
+    Template 2108 Dashboard
+
+	http://www.tooplate.com/view/2108-dashboard
+
+    -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600">
+    <!-- https://fonts.google.com/specimen/Open+Sans -->
+    <link rel="stylesheet" href="css/fontawesome.min.css">
+    <!-- https://fontawesome.com/ -->
+    <link rel="stylesheet" href="css/fullcalendar.min.css">
+    <!-- https://fullcalendar.io/ -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- https://getbootstrap.com/ -->
+    <link rel="stylesheet" href="css/tooplate.css">
+
+    <!--dashboard css-->
+    <link rel="stylesheet" href="dashboard-css/dashboard.css">
+
+    <!--javascript libraries-->
+     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js"></script>
+
+     <!--AWS gateway sdfk -->
+    <script type="text/javascript" src="apiGateway-js-sdk/lib/axios/dist/axios.standalone.js"></script>
+    <script type="text/javascript" src="apiGateway-js-sdk/lib/CryptoJS/rollups/hmac-sha256.js"></script>
+    <script type="text/javascript" src="apiGateway-js-sdk/lib/CryptoJS/rollups/sha256.js"></script>
+    <script type="text/javascript" src="apiGateway-js-sdk/lib/CryptoJS/components/hmac.js"></script>
+    <script type="text/javascript" src="apiGateway-js-sdk/lib/CryptoJS/components/enc-base64.js"></script>
+    <script type="text/javascript" src="apiGateway-js-sdk/lib/url-template/url-template.js"></script>
+    <script type="text/javascript" src="apiGateway-js-sdk/lib/apiGatewayCore/sigV4Client.js"></script>
+    <script type="text/javascript" src="apiGateway-js-sdk/lib/apiGatewayCore/apiGatewayClient.js"></script>
+    <script type="text/javascript" src="apiGateway-js-sdk/lib/apiGatewayCore/simpleHttpClient.js"></script>
+    <script type="text/javascript" src="apiGateway-js-sdk/lib/apiGatewayCore/utils.js"></script>
+    <script type="text/javascript" src="apiGateway-js-sdk/apigClient.js"></script>
+
+    <!--dashboard resources-->
+    <script type="text/javascript" src="dashboard-js/controller.js"></script>
+    <script type="text/javascript" src="dashboard-js/services.js"></script>
+    <script type="text/javascript" src="dashboard-js/graph-util.js"></script>
+
+    <!-- template resources -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <!-- https://jquery.com/download/ -->
+    <script src="js/moment.min.js"></script>
+    <!-- https://momentjs.com/ -->
+    <script src="js/utils.js"></script>
+    <script src="js/Chart.min.js"></script>
+    <!-- http://www.chartjs.org/docs/latest/ -->
+    <script src="js/fullcalendar.min.js"></script>
+    <!-- https://fullcalendar.io/ -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- https://getbootstrap.com/ -->
+    <script src="js/tooplate-scripts.js"></script>
+
+
+</head>
+
+<body id="reportsPage">
+    <div class="" id="home">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="navbar navbar-expand-xl navbar-light bg-light">
+                        <a class="navbar-brand" href="#">
+                            <i class="fas fa-3x fa-tachometer-alt tm-site-icon"></i>
+                            <h1 class="tm-site-title mb-0">Loan Dashboard</h1>
+                        </a>
+                        <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mx-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link">Select Year &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+                                    </a>
+                                </li>
+                                <li class="nav-item nav-link">
+                                    <select id = "selectpicker" class="selectpicker btn-primary">
+                                        <option>2011</option>
+                                        <option>2012</option>
+                                        <option>2013</option>
+                                        <option>2014</option>
+                                        <option>2015</option>
+                                        <option>2016</option>
+                                    </select>
+                                </li>
+
+                                 <li class="nav-item">
+                                    <div id="report_submit_id" class="btn btn-small btn-primary" class="nav-link">Generate Report</div>
+                                </li>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+            <!-- row -->
+            <div class="row tm-content-row tm-mt-big">
+
+                <div class="tm-col tm-col-small">
+                    <div class="bg-white tm-block h-100">
+                        <h3 class="tm-block-title">Total Amount Applied For</h3>
+                        <div id="tot_amnt_applied"></div>
+                    </div>
+                </div>
+
+                <div class="tm-col tm-col-small">
+                    <div class="bg-white tm-block h-100">
+                        <h3 class="tm-block-title">Total Amount Funded</h3>
+                        <div id="tot_amnt_funded"></div>
+                    </div>
+                </div>
+
+                <div class="tm-col tm-col-small">
+                    <div class="bg-white tm-block h-100">
+                        <h3 class="tm-block-title">Total Committed by Investors</h3>
+                        <div id="tot_amnt_invested"></div>
+                    </div>
+                </div>
+
+                <div class="tm-col tm-col-big">
+                    <div class="bg-white tm-block h-100">
+                        <h3 class="tm-block-title">Loan By Credit Grade</h3>
+                        <canvas id="lineChart"></canvas>
+                    </div>
+                </div>
+                <div class="tm-col tm-col-big">
+                    <div class="bg-white tm-block h-100">
+                        <h3 class="tm-block-title">Monthly Loan Volume</h3>
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+                
+                
+                
+            </div>    
+            <footer class="row tm-mt-small">
+                <div class="col-12 font-weight-light">
+                    <p class="d-inline-block tm-bg-black text-white py-2 px-4">
+                        Copyright &copy; 2018. Created by
+                        <a href="http://www.tooplate.com" class="text-white tm-footer-link">Tooplate</a> |  Distributed by <a href="https://themewagon.com" class="text-white tm-footer-link">ThemeWagon
+                        | Used by <a href="https://joby2code.github.io" class="text-white tm-footer-link">Joby
+                        </a>
+                    </p>
+                </div>
+            </footer>
+
+
+
+
+
+        </div>
+    </div>
+
+    <script>
+        let ctxLine,
+            ctxBar,
+            ctxPie,
+            optionsLine,
+            optionsBar,
+            optionsPie,
+            configLine,
+            configBar,
+            configPie,
+            lineChart;
+            barChart;
+        // DOM is ready
+        $(function () {
+            $("#report_submit_id").on('click', function () {
+                debugger
+                var year = $('#selectpicker').find(":selected").text();
+                console.log(year)
+                getLoanSummary(year);
+            });
+        })
+    </script>
+
+</body>
+</html>
