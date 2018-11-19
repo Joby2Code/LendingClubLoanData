@@ -1,9 +1,6 @@
 var apigClient = apigClientFactory.newClient({});
 
-var apigClient = apigClientFactory.newClient({
-  accessKey: 'AKIAZT452VYZRYJWKQRC',
-  secretKey: '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',
-});
+
 
 
 var params = {

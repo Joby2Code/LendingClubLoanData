@@ -4,7 +4,7 @@ import csv
 # Initilaize the constant variables
 
 LOAN_DATA_S3_BUCKET = "lending-loan-data-store";
-LOAN_DATA_FILE_NAME = "loan_test.csv"
+LOAN_DATA_FILE_NAME = "loan.csv"
 s3 = boto3.resource('s3')
 
 fields = ('member_id', 'loan_amnt', 'funded_amnt', 'funded_amnt_inv', 'issue_d', 'grade')
